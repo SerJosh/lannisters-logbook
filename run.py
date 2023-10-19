@@ -94,13 +94,13 @@ print()
 table4 = BeautifulTable()
 table4.columns.header = ["", ""]
 
-name = str(input(q_color + "What is your name?: "))
+name = str(input(q_color + "What is your name?: " + reset_all))
 table4.rows.append([ "NAME", d_color + name])
-print(reset_all + f"Hello {name} :).")
+print(f"Hello {name} :).")
 
-month_or_day = (input(q_color + "\nWould you like to budget for a given month(y/n): "))
+month_or_day = (input(q_color + "\nWould you like to budget for a given month(y/n): " + reset_all))
 if month_or_day == "y":
-    month = (input("Please give me the number of the month eg: 1 is January and so on: "))
+    month = (input(q_color + "Please give me the number of the month eg: 1 is January and so on: " + reset_all)
     if month == "1":
         chosen_month = "January"
         exact_days = 31
@@ -150,27 +150,28 @@ if month_or_day == "y":
         exact_days = 31
         table4.rows.append(["MONTH", d_color + chosen_month, ])
 if month_or_day == "n":
-    days = (input("Then how many days do you want to budget for?: "))
+    days = (input(q_color + "Then how many days do you want to budget for?: " + reset_all))
     table4.rows.append(["Days", d_color + days, ])
 
-currency = (input("\nWhat currency would you like to use?($ or (need to find the others): "))
+currency = (input(q_color + "\nWhat currency would you like to use?($ or (need to find the others): " + reset_all))
 table4.rows.append(["CURRENCY", d_color + currency])
 
-goal_question =  (input("\nDo you want to set a budget goal? ie: a desired amount you want after all expenses(y/n): "))
+goal_question =  (input(q_color + "\nDo you want to set a budget goal? ie: a desired amount you want after all expenses(y/n): " + reset_all))
 if goal_question == "y":
-    goal = (input("Enter the amount of your goal: "))
+    goal = (input((q_color + "Enter the amount of your goal: " + reset_all))
     table4.rows.append(["Goal", d_color + goal ])
 
 print(reset_all + "\nSo these are the details you have given to me so far...\n")
 print(table4)
-(input("\nAre you happy with the details or would you like to start over?(y/n): "))
+(input(q_color + "\nAre you happy with the details or would you like to start over?(y/n): "))
 
 
 table3 = BeautifulTable()
-table3.columns.header = ["asset", "amount"]
+table3.columns.header = ["asset", "amount", "total"]
 add_asset = []
 
-print(textwrap.fill('Now lets get cracking with the financial assets :). '
+print()
+print(reset_all + textwrap.fill('\nNow lets get cracking with the financial assets :). '
                         'By financial assets I mean money that you already have on you that you are willing '
                         'to use in your budget, so if its a pension, a deeply imbedded life savings account '
                         'or anything of that sort, maybe just leave that out ;). What I mean is money in your current '
@@ -184,41 +185,49 @@ def asset_calculate():
    Takes in data of the financial assets plugged in
     '''
     
-    asset = (input(q_color + "\nEnter The name of your financial asset: "))
-    amount = float(input("Enter the amount of that financial asset: "))
-    table3.rows.append([asset, amount])
+    asset = (input(q_color + "\nEnter The name of your financial asset: " + reset_all))
+    amount = float(input(q_color + "Enter the amount of that financial asset: " + reset_all))
     add_asset.append(amount)
+    total = sum(add_asset)
+    table3.rows.append([d_color + asset, amount, total])
+    
 
     print(table3)
-    continue1 = (input("Do you want to add another financial asset? y/n: "))
+    continue1 = (input(q_color + "Do you want to add another financial asset? y/n: " + reset_all))
     if continue1 =="y":
         asset_calculate()
         print(table3)
     if continue1 == "n":
-        print("Ok... so on to the incomes")  
+        return table3  
 
 print(asset_calculate())
 
 
 
 table = BeautifulTable()
-table.columns.header = ["income", "amount"]
+table.columns.header = ["income", "amount",  "total"]
 add = []
 
 def income_calculate():
-    income = (input("Enter The name of your income: "))
-    amount = float(input("Enter your amount of that income: "))
-    table.rows.append([income, amount])
+    '''
+   Takes in data of the incomes plugged in
+    '''
+
+    income = (input(q_color + "Enter The name of your income: " + reset_all))
+    amount = float(input(q_color + "Enter your amount of that income: " + reset_all))
     add.append(amount)
+    total = sum(add)
+    table.rows.append([[d_color + income, amount,  total])
+    
 
     
     print(table)
-    continue1 = (input("Do you want to add another income? y/n: "))
+    continue1 = (input(q_color + "Do you want to add another income? y/n: " + reset_all))
     if continue1 =="y":
         income_calculate()
         print(table)
     if continue1 == "n":
-        print("ok")  
+        return table  
 
 print(income_calculate())
 
@@ -228,7 +237,7 @@ table2.columns.header = ["expense", "amount"]
 minus = []
 
 def expense_calculate():
-    expense = (input("Enter The name of your expense: "))
+    expense = (input(q_color + "Enter The name of your expense: "))
     amount_exp = float(input("Enter your amount of that expense: "))
     table2.rows.append([expense, amount_exp])
     minus.append(amount_exp)
