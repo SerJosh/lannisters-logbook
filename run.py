@@ -100,7 +100,7 @@ print(f"Hello {name} :).")
 
 month_or_day = (input(q_color + "\nWould you like to budget for a given month(y/n): " + reset_all))
 if month_or_day == "y":
-    month = (input(q_color + "Please give me the number of the month eg: 1 is January and so on: " + reset_all)
+    month = (input(q_color + "Please give me the number of the month eg: 1 is January and so on: " + reset_all))
     if month == "1":
         chosen_month = "January"
         exact_days = 31
@@ -158,7 +158,7 @@ table4.rows.append(["CURRENCY", d_color + currency])
 
 goal_question =  (input(q_color + "\nDo you want to set a budget goal? ie: a desired amount you want after all expenses(y/n): " + reset_all))
 if goal_question == "y":
-    goal = (input((q_color + "Enter the amount of your goal: " + reset_all))
+    goal = (input((q_color + "Enter the amount of your goal: " + reset_all)))
     table4.rows.append(["Goal", d_color + goal ])
 
 print(reset_all + "\nSo these are the details you have given to me so far...\n")
@@ -217,7 +217,7 @@ def income_calculate():
     amount = float(input(q_color + "Enter your amount of that income: " + reset_all))
     add.append(amount)
     total = sum(add)
-    table.rows.append([[d_color + income, amount,  total])
+    table.rows.append([d_color + income, amount,  total])
     
 
     
@@ -233,18 +233,21 @@ print(income_calculate())
 
 
 table2 = BeautifulTable()
-table2.columns.header = ["expense", "amount"]
+table2.columns.header = ["expense", "amount", "total"]
 minus = []
 
 def expense_calculate():
-    expense = (input(q_color + "Enter The name of your expense: "))
-    amount_exp = float(input("Enter your amount of that expense: "))
-    table2.rows.append([expense, amount_exp])
+    expense = (input(q_color + "Enter The name of your expense: " + reset_all))
+    amount_exp = float(input(q_color + "Enter your amount of that expense: " + reset_all))
     minus.append(amount_exp)
+    total = sum(minus)
+    table2.rows.append([d_color + expense, amount_exp, total])
+    
+    
 
 
     print(table2)
-    continue1 = (input("Do you want to add another expense? y/n: "))
+    continue1 = (input(q_color + "Do you want to add another expense? y/n: " + reset_all))
     if continue1 =="y":
         expense_calculate()
         print(table2)
