@@ -8,13 +8,15 @@ import textwrap
 reset_all = Style.RESET_ALL           # Reset to normal
 d_color = Fore.LIGHTYELLOW_EX         # Data color
 q_color = Style.BRIGHT + Fore.GREEN   # Question color
-h_color = Style.BRIGHT + Fore.BLUE    # Header and Image color 
+h_color = Style.BRIGHT + Fore.BLUE    # Header and Image color
+
+e_color = Back.RED                  # Error color
 
 def welcome_message():
     '''
     Display the logo, image and welcome message
     '''
-    print(Style.BRIGHT + Fore.BLUE +''' ▄█          ▄████████    ▄████████    ▄████████ ▄██   ▄      ▄████████         
+    print(h_color +''' ▄█          ▄████████    ▄████████    ▄████████ ▄██   ▄      ▄████████         
 ███         ███    ███   ███    ███   ███    ███ ███   ██▄   ███    ███         
 ███         ███    ███   ███    ███   ███    ███ ███▄▄▄███   ███    █▀          
 ███         ███    ███  ▄███▄▄▄▄██▀  ▄███▄▄▄▄██▀ ▀▀▀▀▀▀███   ███                
@@ -77,81 +79,150 @@ __|  \/\|/   /(____|/ //                    /  /||~|~|~|__
                         'incomes, expenses and the timeframe in which you want to budget for. There is additional '
                         'information which is completely optional for you to provide me with but wouldnt it be fun '
                         'to just go all out and discover you financial budgeting story!? '
+                        'To simply put it, you are dealing with a simple formula of financial assets + income - expenses. '
+                        'Use that formula as you wish in any way you want, but walking it with me may give you more insightful results. '
                         'None the less try out the LogBook and lets see where it takes us.', 80))
-    print(Style.BRIGHT + Fore.BLUE +'''\n      __...--~~~~~-._   _.-~~~~~--...__
+    print(h_color + '''\n      __...--~~~~~-._   _.-~~~~~--...__
     //               `V'               \\ 
    //                 |                 \\ 
   //__...--~~~~~~-._  |  _.-~~~~~~--...__\\ 
  //__.....----~~~~._\ | /_.~~~~----.....__\\
 ====================\\|//====================
                     `---`\n''')
-print(welcome_message())
-print(reset_all + textwrap.fill('Ok... So first I am going to ask a few questions before we go on to '
+# print(welcome_message())
+
+
+
+def name_questions():
+    global table4
+    global name
+
+    table4 = BeautifulTable()
+    table4.columns.header = ["", ""]
+    
+    name = str(input(q_color + "What is your name?: " + reset_all))
+    table4.rows.append([ "NAME", d_color + name])
+    try:
+        # Validate that name contains any characters
+        if len(name) <= 0:
+            raise ValueError("The name can't be left empty.")
+        if len(name) >= 10:
+            raise ValueError("The name has too many characters.")
+    except ValueError as e:
+        print(e_color + f'Invalid name. {e} Please provide your name again.' +
+              reset_all)
+        return name_questions() 
+    
+    
+# print(name_questions())
+    
+
+
+def month_question():
+    month_or_day = (input(q_color + "\nWould you like to budget for a given month(y/n): " + reset_all))
+    try:
+        # Validate that name contains any characters
+        if month_or_day == "y" or month_or_day == "n":
+            accept = True
+        else:
+            accept = False
+            if accept == False:
+                raise ValueError("The name can't be left empty.")
+    except ValueError as e:
+        print(e_color + f'Invalid name. {e} Please provide your name again.' +
+              reset_all)
+        return month_question() 
+    if month_or_day=='y':
+	    month = (input(q_color + "Please give me the number of the month eg: 1 is January and so on: " + reset_all))
+	    if month=='1':chosen_month='January';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+	    if month=='2':chosen_month='Febuary';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+	    if month=='3':chosen_month='March';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+	    if month=='4':chosen_month='April';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+	    if month=='5':chosen_month='May';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+	    if month=='6':chosen_month='June';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+	    if month=='7':chosen_month='July';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+	    if month=='8':chosen_month='August';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+	    if month=='9':chosen_month='September';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+	    if month=='10':chosen_month='October';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+	    if month=='11':chosen_month='November';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+	    if month=='12':chosen_month='December';exact_days=31;table4.rows.append(["MONTH", d_color + chosen_month, ])
+    if month_or_day == "n":
+        days = (input(q_color + "Then how many days do you want to budget for?: " + reset_all))
+        table4.rows.append(["Days", d_color + days, ]) 
+
+# MAIN FUNCTION----->
+name = "x"
+table4 = "y"
+exact_days = "z"
+
+def main():
+    welcome_message()
+    print(reset_all + textwrap.fill('Ok... So first I am going to ask a few questions before we go on to '
                     'the actual incomes and expenditures, just some information that might '
                     'be useful to me in regards to your budgeting so hear me out :).', 80))
-print()
+    print()
+    name_questions()
+    month_question()
+    
 
-table4 = BeautifulTable()
-table4.columns.header = ["", ""]
+main()
 
-name = str(input(q_color + "What is your name?: " + reset_all))
-table4.rows.append([ "NAME", d_color + name])
-print(f"Hello {name} :).")
+# MAIN FUNCTION----->
 
-month_or_day = (input(q_color + "\nWould you like to budget for a given month(y/n): " + reset_all))
-if month_or_day == "y":
-    month = (input(q_color + "Please give me the number of the month eg: 1 is January and so on: " + reset_all))
-    if month == "1":
-        chosen_month = "January"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-    if month == "2":
-        chosen_month = "Febuary"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-    if month == "3":
-        chosen_month = "March"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-    if month == "4":
-        chosen_month = "April"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-    if month == "5":
-        chosen_month = "May"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-    if month == "6":
-        chosen_month = "June"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-    if month == "7":
-        chosen_month = "July"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-    if month == "8":
-        chosen_month = "August"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-    if month == "9":
-        chosen_month = "September"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-    if month == "10":
-        chosen_month = "October"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-    if month == "11":
-        chosen_month = "November"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-    if month == "12":
-        chosen_month = "December"
-        exact_days = 31
-        table4.rows.append(["MONTH", d_color + chosen_month, ])
-if month_or_day == "n":
-    days = (input(q_color + "Then how many days do you want to budget for?: " + reset_all))
-    table4.rows.append(["Days", d_color + days, ])
+# month_or_day = (input(q_color + "\nWould you like to budget for a given month(y/n): " + reset_all))
+# if month_or_day == "y":
+#     month = (input(q_color + "Please give me the number of the month eg: 1 is January and so on: " + reset_all))
+#     if month == "1":
+#         chosen_month = "January"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+#     if month == "2":
+#         chosen_month = "Febuary"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+#     if month == "3":
+#         chosen_month = "March"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+#     if month == "4":
+#         chosen_month = "April"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+#     if month == "5":
+#         chosen_month = "May"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+#     if month == "6":
+#         chosen_month = "June"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+#     if month == "7":
+#         chosen_month = "July"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+#     if month == "8":
+#         chosen_month = "August"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+#     if month == "9":
+#         chosen_month = "September"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+#     if month == "10":
+#         chosen_month = "October"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+#     if month == "11":
+#         chosen_month = "November"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+#     if month == "12":
+#         chosen_month = "December"
+#         exact_days = 31
+#         table4.rows.append(["MONTH", d_color + chosen_month, ])
+# if month_or_day == "n":
+#     days = (input(q_color + "Then how many days do you want to budget for?: " + reset_all))
+#     table4.rows.append(["Days", d_color + days, ])
 
 currency = (input(q_color + "\nWhat currency would you like to use?($ or (need to find the others): " + reset_all))
 table4.rows.append(["CURRENCY", d_color + currency])
