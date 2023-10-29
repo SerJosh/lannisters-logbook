@@ -9,7 +9,6 @@ reset_all = Style.RESET_ALL           # Reset to normal
 d_color = Fore.LIGHTYELLOW_EX         # Data color
 q_color = Style.BRIGHT + Fore.GREEN   # Question color
 h_color = Style.BRIGHT + Fore.BLUE    # Header and Image color
-
 e_color = Back.RED                  # Error color
 
 def welcome_message():
@@ -140,6 +139,7 @@ def month_question():
         return choose_day()
 
 def choose_month():
+    global exact_days
     month = int(input(q_color + "Please give me the number of the month eg: 1 is January and so on: " + reset_all))
     try:
         # Validate that name contains any characters
@@ -173,9 +173,10 @@ def choose_month():
 	
     
 def choose_day():
+    global exact_days
 
-    days = (input(q_color + "Then how many days do you want to budget for?: " + reset_all))
-    table4.rows.append(["Days", d_color + days, ]) 
+    exact_days = (input(q_color + "Then how many days do you want to budget for?: " + reset_all))
+    table4.rows.append(["Days", d_color + exact_days, ]) 
 
 def currency_question():
     currency = (input(q_color + "\nWhat currency would you like to use?($ or (need to find the others): " + reset_all))
@@ -192,6 +193,8 @@ def currency_question():
     table4.rows.append(["CURRENCY", d_color + currency])
 
 def goal_questionn():
+    global goal
+    global goal_question
     goal_question =  (input(q_color + "\nDo you want to set a budget goal? ie: a desired amount you want after all expenses(y/n): " + reset_all))
     try:
         # Validate that name contains any characters
@@ -223,120 +226,6 @@ def reset_table():
     return first_questions()
     
 
-# MAIN FUNCTION----->
-name = "x"
-table4 = "y"
-exact_days = "z"
-
-def first_questions():
-    name_questions()
-    month_question()
-    currency_question()
-    goal_questionn()
-    question_summary()
-
-
-def main():
-    welcome_message()
-    print(reset_all + textwrap.fill('Ok... So first I am going to ask a few questions before we go on to '
-                    'the actual incomes and expenditures, just some information that might '
-                    'be useful to me in regards to your budgeting so hear me out :).', 80))
-    print()
-    first_questions()
-    
-    
-    
-
-main()
-
-# MAIN FUNCTION----->
-
-# month_or_day = (input(q_color + "\nWould you like to budget for a given month(y/n): " + reset_all))
-# if month_or_day == "y":
-#     month = (input(q_color + "Please give me the number of the month eg: 1 is January and so on: " + reset_all))
-#     if month == "1":
-#         chosen_month = "January"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-#     if month == "2":
-#         chosen_month = "Febuary"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-#     if month == "3":
-#         chosen_month = "March"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-#     if month == "4":
-#         chosen_month = "April"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-#     if month == "5":
-#         chosen_month = "May"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-#     if month == "6":
-#         chosen_month = "June"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-#     if month == "7":
-#         chosen_month = "July"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-#     if month == "8":
-#         chosen_month = "August"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-#     if month == "9":
-#         chosen_month = "September"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-#     if month == "10":
-#         chosen_month = "October"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-#     if month == "11":
-#         chosen_month = "November"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-#     if month == "12":
-#         chosen_month = "December"
-#         exact_days = 31
-#         table4.rows.append(["MONTH", d_color + chosen_month, ])
-# if month_or_day == "n":
-#     days = (input(q_color + "Then how many days do you want to budget for?: " + reset_all))
-#     table4.rows.append(["Days", d_color + days, ])
-
-
-
-
-
-
-
-
-table3 = BeautifulTable()
-table3.columns.header = ["asset", "amount", "total"]
-add_asset = []
-
-print()
-print(reset_all + textwrap.fill('\nNow lets get cracking with the financial assets :). '
-                        'By financial assets I mean money that you already have on you that you are willing '
-                        'to use in your budget, so if its a pension, a deeply imbedded life savings account '
-                        'or anything of that sort, maybe just leave that out ;). What I mean is money in your current '
-                        'account, or an amount in it you are willing to give in your budget, same goes with revolut '
-                        'or other institutions like that. Cash on hand may be another one you want to put in here '
-                        'In the end its all up to you to decide what you want in here, but try leave nothing out '
-                        'which may constitute as a financial asset as the more detail you put in only helps you more.', 80))
-
-# def get_int():
-#     amount = (input(q_color + "Enter the amount of that financial asset: " + reset_all))
-#     try:
-#         user_num = int(amount)
-#         return user_num
-#     except ValueError:
-#         print("I need an integer to continue.")
-#         return(get_int())
-
-# print(get_int())
 
 def asset_calculate():
     '''
@@ -348,19 +237,19 @@ def asset_calculate():
         # Validate that name contains any characters
         if len(asset) <= 0:
             raise ValueError("The asset name can't be left empty.")
-        if len(asset) >= 10:
+        if len(asset) >= 20:
             raise ValueError("The asset name has too many characters.")
     except ValueError as e:
         print(e_color + f'Invalid name. {e} Please provide your asset name again.' +
               reset_all)
         return asset_calculate()
 
-    amount = (input(q_color + "Enter the amount of that financial asset: " + reset_all))
-    try:
-        user_num = int(amount)
-    except ValueError:
-        print("I need an integer to continue.")
-        return(asset_calculate())
+    amount = float(input(q_color + "Enter the amount of that financial asset: " + reset_all))
+    # try:
+    #     user_num = int(amount)
+    # except ValueError:
+    #     print("I need an integer to continue.")
+    #     return(asset_calculate())
 
     add_asset.append(amount)
     total = sum(add_asset)
@@ -375,13 +264,11 @@ def asset_calculate():
     if continue1 == "n":
         return table3  
 
-print(asset_calculate())
 
 
 
-table = BeautifulTable()
-table.columns.header = ["income", "amount",  "total"]
-add = []
+
+
 
 def income_calculate():
     '''
@@ -389,6 +276,17 @@ def income_calculate():
     '''
 
     income = (input(q_color + "Enter The name of your income: " + reset_all))
+    try:
+        # Validate that name contains any characters
+        if len(income) <= 0:
+            raise ValueError("The asset name can't be left empty.")
+        if len(income) >= 20:
+            raise ValueError("The asset name has too many characters.")
+    except ValueError as e:
+        print(e_color + f'Invalid name. {e} Please provide your asset name again.' +
+              reset_all)
+        return income_calculate()
+
     amount = float(input(q_color + "Enter your amount of that income: " + reset_all))
     add.append(amount)
     total = sum(add)
@@ -404,15 +302,24 @@ def income_calculate():
     if continue1 == "n":
         return table  
 
-print(income_calculate())
 
 
-table2 = BeautifulTable()
-table2.columns.header = ["expense", "amount", "total"]
-minus = []
+
+
 
 def expense_calculate():
     expense = (input(q_color + "Enter The name of your expense: " + reset_all))
+    try:
+        # Validate that name contains any characters
+        if len(expense) <= 0:
+            raise ValueError("The asset name can't be left empty.")
+        if len(expense) >= 20:
+            raise ValueError("The asset name has too many characters.")
+    except ValueError as e:
+        print(e_color + f'Invalid name. {e} Please provide your asset name again.' +
+              reset_all)
+        return expense_calculate()
+
     amount_exp = float(input(q_color + "Enter your amount of that expense: " + reset_all))
     minus.append(amount_exp)
     total = sum(minus)
@@ -429,24 +336,92 @@ def expense_calculate():
     if continue1 == "n":
         print("ok") 
 
-print(expense_calculate()) 
 
-inco_total = sum(add)
-expe_total = sum(minus)
-asset_total = sum(add_asset)
+# MAIN FUNCTION----->
+name = "x"
+table4 = "y"
+exact_days = "z"
+goal_question = "a"
 
-surplus = asset_total + inco_total - expe_total
+table3 = BeautifulTable()
+table3.columns.header = ["asset", "amount", "total"]
+add_asset = []
 
-print(table3)
-print()
-print(table)
-print()
-print(table2)
-print()
-print(" Your financial assets are " + str(asset_total))
-print(" Your total income is " + str(inco_total))
-print(" Your total expense is " + str(expe_total))
-print("your gross amount will be " + str(surplus))
+table = BeautifulTable()
+table.columns.header = ["income", "amount",  "total"]
+add = []
+
+table2 = BeautifulTable()
+table2.columns.header = ["expense", "amount", "total"]
+minus = []
+
+def first_questions():
+    name_questions()
+    month_question()
+    currency_question()
+    goal_questionn()
+    question_summary()
+
+
+def main():
+    welcome_message()
+    print(reset_all + textwrap.fill('Ok... So first I am going to ask a few questions before we go on to '
+                    'the actual incomes and expenditures, just some information that might '
+                    'be useful to me in regards to your budgeting so hear me out :).', 80))
+    print()
+    first_questions()
+    print()
+    print(reset_all + textwrap.fill('\nNow lets get cracking with the financial assets :). '
+                        'By financial assets I mean money that you already have on you that you are willing '
+                        'to use in your budget, so if its a pension, a deeply imbedded life savings account '
+                        'or anything of that sort, maybe just leave that out ;). What I mean is money in your current '
+                        'account, or an amount in it you are willing to give in your budget, same goes with revolut '
+                        'or other institutions like that. Cash on hand may be another one you want to put in here '
+                        'In the end its all up to you to decide what you want in here, but try leave nothing out '
+                        'which may constitute as a financial asset as the more detail you put in only helps you more.', 80))
+    asset_calculate()
+    income_calculate()
+    expense_calculate()
+    results_page()
+    
+    
+    
+
+main()
+
+ 
+def results_page():
+    inco_total = sum(add)
+    expe_total = sum(minus)
+    asset_total = sum(add_asset)
+    calc_days = (int(f"{exact_days}"))
+
+    if goal_question == "y":
+        goalz = (float(f"{goal}"))
+
+    surplus = asset_total + inco_total - expe_total
+    dayz = surplus / calc_days
+    print(reset_all + textwrap.fill(f'\n{name} so this is the summary of your budget...'))
+    print()
+    print(f'Budget Summary of {name}')
+    print(table3)
+    print()
+    print(table)
+    print()
+    print(table2)
+    print()
+    print(" Your financial assets are " + str(asset_total))
+    print(" Your total income is " + str(inco_total))
+    print(" Your total expense is " + str(expe_total))
+    print("your gross amount will be " + str(surplus))
+    print(f"you will be able to spend {dayz} per day")
+
+    if goal_question == "y":
+        target_goal = surplus - goalz 
+        if target_goal >= 0:
+            print("You are over your goal by: " + str(target_goal) + "\n")
+        else:
+            print("You are under your goal by: " + str(target_goal) + " short \n")
 
 
 
